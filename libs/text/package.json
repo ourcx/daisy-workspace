@@ -1,7 +1,7 @@
 {
-  "name": "@org/api-products",
+  "name": "@org/text",
   "version": "0.0.1",
-  "private": true,
+  "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,16 +13,5 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     }
-  },
-  "nx": {
-    "tags": [
-      "scope:api"
-    ]
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
-  "devDependencies": {
-    "@org/models": "workspace:*"
   }
 }

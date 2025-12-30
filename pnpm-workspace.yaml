@@ -1,0 +1,11 @@
+packages:
+  # 所有 packages 目录下的包
+  - 'packages/*'
+  # 所有 apps 目录下的应用
+  - 'apps/*'
+  # 所有 libs 目录下的库（包括子目录）
+  - 'libs/**'
+  # 所有 tools 目录下的工具
+  - 'tools/*'
+  # 排除 test 目录
+  - '!**/test/**'

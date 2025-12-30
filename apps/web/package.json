@@ -1,5 +1,5 @@
 {
-  "name": "@org/shop",
+  "name": "@org/web",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -15,10 +15,6 @@
     }
   },
   "devDependencies": {
-    "@org/models": "*",
-    "@org/shop-data": "*",
-    "@org/shop-feature-product-detail": "*",
-    "@org/shop-feature-products": "*",
-    "@org/shop-shared-ui": "*"
+    "@org/models": "workspace:*"
   }
 }
