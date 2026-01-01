@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './app.css';
+import './app.module.css';
 import { PlaitBoard, PlaitElement, PlaitTheme, Viewport } from '@plait/core';
 import * as localforage from 'localforage'; // 修改为命名空间导入
 // @ts-ignore
