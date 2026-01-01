@@ -1,33 +1,86 @@
-import { lazy, Suspense } from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import { LoadingSpinner } from '@org/shop-shared-ui';
+import { useState, useEffect } from 'react';
 import './app.css';
+import { PlaitBoard, PlaitElement, PlaitTheme, Viewport } from '@plait/core';
+import * as localforage from 'localforage'; // 修改为命名空间导入
+// @ts-ignore
+import { OrgDrawnix } from '@org/drawnix';
 
-// Lazy load feature components
-const ProductList = lazy(() => import('@org/shop-feature-products').then(m => ({ default: m.ProductList })));
-const ProductDetail = lazy(() => import('@org/shop-feature-product-detail').then(m => ({ default: m.ProductDetail })));
+type AppValue = {
+  children: PlaitElement[];
+  viewport?: Viewport;
+  theme?: PlaitTheme;
+};
+
+const MAIN_BOARD_CONTENT_KEY = 'main_board_content';
+
+localforage.config({
+  name: 'Drawnix',
+  storeName: 'drawnix_store',
+  driver: [localforage.INDEXEDDB, localforage.LOCALSTORAGE],
+});
 
 export function App() {
-  return (
-    <div className="app">
-      <header className="app-header">
-        <div className="header-content">
-          <h1 className="app-title">Nx Shop Demo</h1>
-        </div>
-      </header>
+  const [value, setValue] = useState<AppValue>({ children: [] });
 
-      <main className="app-main">
-        <Suspense fallback={<LoadingSpinner />}>
-          <Routes>
-            <Route path="/" element={<Navigate to="/products" replace />} />
-            <Route path="/products" element={<ProductList />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="*" element={<Navigate to="/products" replace />} />
-          </Routes>
-        </Suspense>
-      </main>
-    </div>
+  const [tutorial, setTutorial] = useState(false);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const storedData = (await localforage.getItem(
+        MAIN_BOARD_CONTENT_KEY
+      )) as AppValue;
+      if (storedData) {
+        setValue(storedData);
+        if (storedData.children && storedData.children.length === 0) {
+          setTutorial(true);
+        }
+        return;
+      }
+      setTutorial(true);
+    };
+    loadData();
+  }, []);
+  return (
+    <OrgDrawnix
+      value={value.children}
+      viewport={value.viewport}
+      theme={value.theme}
+      onChange={(value) => {
+        const newValue = value as AppValue;
+        localforage.setItem(MAIN_BOARD_CONTENT_KEY, newValue);
+        setValue(newValue);
+        if (newValue.children && newValue.children.length > 0) {
+          setTutorial(false);
+        }
+      }}
+      tutorial={tutorial}
+      afterInit={(board) => {
+        console.log('board initialized');
+
+        // console.log(
+        //   `add __drawnix__web__debug_log to window, so you can call add log anywhere, like: window.__drawnix__web__console('some thing')`
+        // );
+        // (window as any)['__drawnix__web__console'] = (value: string) => {
+        //   addDebugLog(board, value);
+        // };
+      }}
+    ></OrgDrawnix>
   );
 }
+
+const addDebugLog = (board: PlaitBoard, value: string) => {
+  const container = PlaitBoard.getBoardContainer(board).closest(
+    '.drawnix'
+  ) as HTMLElement;
+  let consoleContainer = container.querySelector('.drawnix-console');
+  if (!consoleContainer) {
+    consoleContainer = document.createElement('div');
+    consoleContainer.classList.add('drawnix-console');
+    container.append(consoleContainer);
+  }
+  const div = document.createElement('div');
+  div.innerHTML = value;
+  consoleContainer.append(div);
+};
 
 export default App;

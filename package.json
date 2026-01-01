@@ -2,10 +2,15 @@
   "name": "@org/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "nx serve web --host=0.0.0.0",
+    "build": "nx run-many -t=build"
+  },
   "private": true,
   "dependencies": {
+    "@plait/core": "^0.92.1",
     "express": "^4.21.2",
+    "localforage": "^1.10.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-router-dom": "6.29.0"
@@ -37,6 +42,7 @@
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "16.3.0",
     "@types/express": "^4.17.21",
+    "@types/localforage": "^0.0.34",
     "@types/node": "20.19.9",
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",

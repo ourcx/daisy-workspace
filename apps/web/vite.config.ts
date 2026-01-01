@@ -1,44 +1,39 @@
-/// <reference types='vitest' />
+// apps/web/vite.config.ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { resolve } from 'path';
 
-export default defineConfig(() => ({
-  root: __dirname,
-  cacheDir: '../../node_modules/.vite/apps/shop',
-  server: {
-    port: 4200,
-    host: 'localhost',
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@org/drawnix': resolve(__dirname, '../../libs/drawnix/src/index.ts'),
+      '@org/text': resolve(__dirname, '../../libs/text/src/index.ts'),
+      '@org/board': resolve(__dirname, '../../libs/board/src/index.ts'),
+      '@org/models': resolve(__dirname, '../../libs/models/src/index.ts'),
+      '@org/shared-test-utils': resolve(__dirname, '../../libs/shared-test-utils/src/index.ts'),
+    }
   },
-  preview: {
-    port: 4200,
-    host: 'localhost',
+  optimizeDeps: {
+    include: [
+      '@org/drawnix',
+      '@org/text',
+      '@org/board',
+    ]
   },
-  plugins: [react(), nxViteTsPaths()],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
   build: {
-    outDir: './dist',
-    emptyOutDir: true,
-    reportCompressedSize: true,
-    commonjsOptions: {
-      transformMixedEsModules: true,
-    },
-  },
-  test: {
-    name: '@org/shop',
-    watch: false,
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test-setup.ts'],
-    include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    reporters: ['default'],
-    coverage: {
-      reportsDirectory: './test-output/vitest/coverage',
-      provider: 'v8' as const,
-      include: ['src/**/*.{ts,tsx}'],
-    },
-  },
-}));
+    rollupOptions: {
+      external: [
+        // 如果这些是 peerDependencies，需要外部化
+        'react',
+        'react-dom',
+      ],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM'
+        }
+      }
+    }
+  }
+});

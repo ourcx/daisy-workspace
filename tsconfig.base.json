@@ -1,21 +1,61 @@
 {
+  // "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true,
-    "importHelpers": true,
-    "isolatedModules": true,
-    "lib": ["es2022"],
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "es2022",
-    "customConditions": ["@org/source"]
-  }
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuild.json",
+    "jsx": "react-jsx",
+    "lib": [
+      "dom"
+    ],
+    "types": [
+      "node",
+      "@nx/react/typings/cssmodule.d.ts",
+      "@nx/react/typings/image.d.ts",
+      "vite/client"
+    ],
+    // "rootDir": "src",
+    // 添加这些配置
+    "baseUrl": ".",
+    "paths": {
+      "@drawnix/drawnix": [
+        "../../libs/drawnix/src/index.ts"
+      ],
+      "@drawnix/*": [
+        "../../libs/drawnix/src/*"
+      ]
+    }
+  },
+  "exclude": [
+    "out-tsc",
+    "dist",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.js",
+    "src/**/*.test.js",
+    "src/**/*.spec.jsx",
+    "src/**/*.test.jsx",
+    "vite.config.ts",
+    "vite.config.mts",
+    "vitest.config.ts",
+    "vitest.config.mts",
+    "eslint.config.js",
+    "eslint.config.cjs",
+    "eslint.config.mjs"
+  ],
+  "include": [
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "references": [
+    {
+      "path": "../../libs/shared/models/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/drawnix/tsconfig.lib.json"
+    }
+  ]
 }

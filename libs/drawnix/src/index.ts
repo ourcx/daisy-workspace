@@ -1,1 +1,1 @@
-export * from './lib/drawnix';
+export { default as OrgDrawnix } from './lib/drawnix';
